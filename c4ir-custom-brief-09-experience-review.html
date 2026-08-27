@@ -1,0 +1,594 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>투자심의 반려 시뮬레이션 - C4IR Custom Brief No.09</title>
+<meta name="description" content="에너지 전환의 네 병목이 기업 투자심의에서 어떤 반려 사유와 예비 청구 항목으로 돌아오는지 체험하는 C4IR Custom Brief No.09 시네마틱 경험.">
+<meta property="og:title" content="투자심의 반려 시뮬레이션 · C4IR Custom Brief No.09">
+<meta property="og:description" content="투자안은 왜 반려됐고, 어떤 비용이 아직 도착하지 않은 청구서로 남았는가.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Noto+Serif+KR:wght@600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+:root{
+  --bg:#E6E9EC;
+  --paper:#FCFDFB;
+  --paper2:#F5F9FB;
+  --ink:#2A2F33;
+  --muted:#555D62;
+  --line:#A6C2D7;
+  --soft:#D2E0EA;
+  --print:#4A7FA8;
+  --blue:#2C5674;
+  --blue2:#1F4058;
+  --red:#C0332B;
+  --amber:#b57a23;
+  --green:#335e4a;
+  --mono:"IBM Plex Mono",ui-monospace,monospace;
+  --sans:"Pretendard Variable","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --serif:"Noto Serif KR","Pretendard Variable",serif;
+  --ease:cubic-bezier(.19,.85,.24,1);
+}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--ink)}
+body{font-family:var(--sans);font-size:15px;line-height:1.7;word-break:keep-all;overflow-wrap:break-word;font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased}
+button,a{font:inherit;color:inherit}
+button{border:0;background:none;cursor:pointer}
+button,a{touch-action:manipulation}
+button:focus-visible,a:focus-visible{outline:3px solid var(--red);outline-offset:4px}
+@media(max-width:430px){button:focus-visible,a:focus-visible{outline:0}}
+.app{position:relative;width:100%;height:100%;overflow:hidden;isolation:isolate;background:var(--bg)}
+.app::before{
+  content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(circle at 18% 18%,rgba(74,127,168,.14),transparent 25%),
+    radial-gradient(circle at 76% 72%,rgba(192,51,43,.08),transparent 28%),
+    linear-gradient(90deg,rgba(74,127,168,.16) 1px,transparent 1px),
+    linear-gradient(rgba(74,127,168,.12) 1px,transparent 1px);
+  background-size:auto,auto,64px 64px,64px 64px;
+}
+.app::after{
+  content:"";position:absolute;inset:-40%;z-index:1;pointer-events:none;opacity:.11;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/></filter><rect width='160' height='160' filter='url(%23n)' opacity='.42'/></svg>");
+  animation:grain 1.2s steps(3) infinite;
+}
+@keyframes grain{33%{transform:translate(-2%,1%)}66%{transform:translate(1%,-2%)}}
+.topbar{
+  position:fixed;inset:0 0 auto;z-index:30;height:54px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;
+  border-bottom:1px solid rgba(20,28,37,.16);background:rgba(215,217,210,.94);
+  font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--muted);
+}
+.topbar>div{min-width:0;padding:0 18px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand b,.status b{color:var(--red)}
+.readout{height:54px;min-width:174px;display:grid;place-items:center;border-left:1px solid rgba(20,28,37,.16);border-right:1px solid rgba(20,28,37,.16);font-weight:700;color:var(--blue)}
+.status{text-align:right}.lang{display:inline-flex;margin-left:12px}.lang button{min-width:34px;min-height:28px;border:1px solid rgba(20,28,37,.2);font-size:10px;color:var(--muted)}.lang button+button{border-left:0}.lang button[aria-pressed="true"]{background:var(--blue);color:#fff;border-color:var(--blue)}
+.scene{
+  position:absolute;inset:54px 0 0;z-index:2;display:grid;grid-template-columns:minmax(0,1fr) minmax(390px,.98fr);
+  gap:min(5vw,64px);align-items:center;padding:clamp(22px,4.6vw,64px) clamp(20px,5vw,76px);
+  opacity:0;visibility:hidden;transform:translateY(18px) scale(.99);
+  transition:opacity .55s var(--ease),transform .55s var(--ease),visibility 0s linear .55s;
+}
+.scene.active{opacity:1;visibility:visible;transform:none;transition-delay:0s}
+.scene:not(#scene-boot){align-items:start;padding-top:clamp(74px,6.5vw,96px)}
+.scene.dark{background:linear-gradient(135deg,#0b2434,#14202a);color:var(--paper)}
+.scene.dark .lead,.scene.dark .caption,.scene.dark .small{color:#c5d0d4}
+.copy{position:relative;z-index:4;max-width:790px}
+.eyebrow{display:flex;align-items:center;gap:12px;margin:0 0 18px;font-family:var(--mono);font-size:11px;letter-spacing:.16em;color:var(--red);text-transform:uppercase}
+.eyebrow::before{content:"";width:9px;height:9px;border:2px solid currentColor}
+.eyebrow::after{content:"";width:min(250px,25vw);height:1px;background:currentColor;opacity:.7}
+h1,h2{margin:0;font-family:var(--serif);font-weight:900;letter-spacing:0;line-height:1.05}
+h1{font-size:clamp(2.65rem,5.3vw,4.8rem)}
+h2{font-size:clamp(1.9rem,3.55vw,3.25rem)}
+em{font-style:normal;color:var(--blue);text-decoration:none}
+.scene.dark em{color:var(--paper)}
+.lead{max-width:700px;margin:20px 0 0;font-family:var(--serif);font-size:clamp(1.05rem,1.8vw,1.32rem);font-weight:700;line-height:1.72}
+.caption{max-width:680px;margin:16px 0 0;color:#46535d}.small{max-width:660px;margin:14px 0 0;color:var(--muted)}
+.meta-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:26px;max-width:740px}
+.meta-box{border-top:2px solid currentColor;padding-top:10px;font-family:var(--mono);font-size:11px;color:var(--muted)}
+.meta-box b{display:block;color:var(--red);font-size:clamp(1.8rem,4.8vw,3.2rem);line-height:1}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:30px}
+.cmd{
+  min-height:52px;display:inline-flex;align-items:center;justify-content:center;padding:13px 18px;border:1px solid var(--blue2);
+  background:var(--blue2);color:#fff;font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:.05em;text-decoration:none;
+  box-shadow:6px 6px 0 rgba(20,28,37,.18);transition:transform .18s,box-shadow .18s,background .18s;
+}
+.cmd:hover{transform:translate(2px,2px);box-shadow:4px 4px 0 rgba(20,28,37,.2)}
+.cmd.alt{background:transparent;color:var(--blue2);box-shadow:none}.scene.dark .cmd.alt{color:var(--paper);border-color:rgba(244,240,228,.36)}
+.review-stage{
+  position:relative;z-index:3;min-height:min(650px,calc(100dvh - 118px));border:1px solid rgba(20,28,37,.2);
+  background:rgba(252,253,251,.56);overflow:hidden;box-shadow:0 24px 80px rgba(20,28,37,.11);
+}
+.scene.dark .review-stage{border-color:rgba(166,194,215,.38);background:rgba(252,253,251,.06)}
+.review-stage::before{
+  content:"INVESTMENT REVIEW SYSTEM";position:absolute;left:18px;top:16px;z-index:3;font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--red);
+}
+.review-stage::after{
+  content:"CONFIDENTIAL / BOARD PACKET";position:absolute;right:18px;top:16px;z-index:3;font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--muted);
+}
+.grid-bg{position:absolute;inset:0;background:
+  radial-gradient(circle at 26% 58%,rgba(74,127,168,.16),transparent 20%),
+  radial-gradient(circle at 70% 28%,rgba(192,51,43,.08),transparent 18%),
+  repeating-linear-gradient(0deg,rgba(166,194,215,.38) 0 1px,transparent 1px 30px),
+  repeating-linear-gradient(90deg,rgba(166,194,215,.28) 0 1px,transparent 1px 30px)}
+.doc{
+  position:absolute;left:50%;top:51%;width:min(470px,74%);min-height:74%;padding:34px 28px 28px;
+  transform:translate(-50%,-50%);background:var(--paper);border:1px solid var(--line);color:var(--ink);
+  box-shadow:18px 18px 0 rgba(74,127,168,.15);transition:transform .7s var(--ease),width .7s var(--ease),min-height .7s var(--ease),filter .7s var(--ease);
+}
+.doc::before{
+  content:attr(data-report-label);position:absolute;left:-1px;right:-1px;top:-1px;height:28px;
+  display:flex;align-items:center;padding:0 14px;border:1px solid var(--line);background:var(--paper2);
+  font-family:var(--mono);font-size:9px;letter-spacing:.16em;color:var(--blue);font-weight:700;
+}
+.doc::after{
+  content:"C4IR CUSTOM BRIEF NO.09";position:absolute;right:16px;bottom:12px;font-family:var(--mono);
+  font-size:8.5px;letter-spacing:.18em;color:#879096;
+}
+.doc.fold{width:min(310px,60%);min-height:78%;transform:translate(-50%,-50%) rotate(.4deg);box-shadow:10px 10px 0 rgba(20,28,37,.16)}
+.doc-head{margin-top:14px;font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;color:var(--blue);display:flex;justify-content:space-between;gap:16px;border-bottom:2px solid var(--blue);padding-bottom:12px}
+.doc-title{margin:24px 0 14px;font-family:var(--sans);font-weight:800;font-size:clamp(1.45rem,2.35vw,2.05rem);line-height:1.18;color:var(--ink)}
+.field-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:16px 0 18px}
+.field{min-height:52px;border:1px solid var(--soft);padding:8px 10px;font-family:var(--mono);font-size:10px;color:var(--muted);background:var(--paper2)}
+.field b{display:block;color:var(--ink);font-size:13px;margin-top:2px}
+.line{height:1px;background:var(--soft);margin:13px 0}.line.short{width:72%}.line.red{height:2px;background:var(--red);width:56%}
+.risk-log{position:absolute;left:22px;right:22px;bottom:22px;display:grid;gap:8px;z-index:5}
+.risk-item{
+  display:grid;grid-template-columns:42px 1fr auto;gap:10px;align-items:center;min-height:44px;padding:8px 10px;
+  border:1px solid rgba(199,39,28,.42);background:rgba(244,240,228,.86);font-family:var(--mono);font-size:10px;color:var(--muted);
+  opacity:.28;transform:translateY(8px);transition:opacity .45s var(--ease),transform .45s var(--ease),background .45s;
+}
+.risk-item.on{opacity:1;transform:none;background:#fff}.risk-item b{color:var(--red)}.risk-item span{color:var(--ink);font-weight:700}.risk-item i{font-style:normal;color:var(--blue)}
+.stamp-returned{
+  position:absolute;right:32px;top:84px;z-index:6;width:190px;height:92px;border:5px double var(--red);display:grid;place-items:center;
+  color:var(--red);font-family:var(--mono);font-size:21px;font-weight:700;letter-spacing:.08em;transform:rotate(-9deg) scale(.82);
+  opacity:0;transition:opacity .45s var(--ease),transform .45s var(--ease);
+}
+.scene[data-return="true"] .stamp-returned{opacity:.9;transform:rotate(-9deg) scale(1)}
+.memo{position:absolute;right:26px;bottom:164px;z-index:6;width:210px;padding:13px;border-left:4px solid var(--red);background:rgba(255,255,255,.82);font-weight:800;box-shadow:8px 8px 0 rgba(20,28,37,.12)}
+.memo small{display:block;margin-bottom:4px;font-family:var(--mono);font-weight:700;color:var(--red)}
+.bill{
+  position:absolute;left:50%;top:50%;z-index:7;width:min(330px,70%);padding:32px 24px 28px;background:var(--paper);color:var(--ink);
+  border:0;filter:drop-shadow(0 1px 0 rgba(42,47,51,.1)) drop-shadow(0 18px 28px rgba(42,47,51,.2));
+  transform:translate(-50%,-50%) rotate(-.8deg);
+}
+.bill::before,.bill::after{
+  content:"";position:absolute;left:0;right:0;height:12px;background:var(--paper);
+}
+.bill::before{top:-11px;clip-path:polygon(0% 100%,2% 0%,4% 100%,6% 0%,8% 100%,10% 0%,12% 100%,14% 0%,16% 100%,18% 0%,20% 100%,22% 0%,24% 100%,26% 0%,28% 100%,30% 0%,32% 100%,34% 0%,36% 100%,38% 0%,40% 100%,42% 0%,44% 100%,46% 0%,48% 100%,50% 0%,52% 100%,54% 0%,56% 100%,58% 0%,60% 100%,62% 0%,64% 100%,66% 0%,68% 100%,70% 0%,72% 100%,74% 0%,76% 100%,78% 0%,80% 100%,82% 0%,84% 100%,86% 0%,88% 100%,90% 0%,92% 100%,94% 0%,96% 100%,98% 0%,100% 100%)}
+.bill::after{bottom:-11px;clip-path:polygon(0% 0%,2% 100%,4% 0%,6% 100%,8% 0%,10% 100%,12% 0%,14% 100%,16% 0%,18% 100%,20% 0%,22% 100%,24% 0%,26% 100%,28% 0%,30% 100%,32% 0%,34% 100%,36% 0%,38% 100%,40% 0%,42% 100%,44% 0%,46% 100%,48% 0%,50% 100%,52% 0%,54% 100%,56% 0%,58% 100%,60% 0%,62% 100%,64% 0%,66% 100%,68% 0%,70% 100%,72% 0%,74% 100%,76% 0%,78% 100%,80% 0%,82% 100%,84% 0%,86% 100%,88% 0%,90% 100%,92% 0%,94% 100%,96% 0%,98% 100%,100% 0%)}
+.bill h3{margin:0 0 5px;text-align:center;font-family:var(--mono);font-size:13px;letter-spacing:.18em;color:var(--ink);font-weight:700}
+.bill .sub{
+  font-family:var(--mono);font-size:9px;letter-spacing:.16em;color:var(--muted);text-align:center;
+  border-top:1px dashed var(--line);border-bottom:1px dashed var(--line);padding:8px 0;margin:12px 0;
+}
+.bill-row{display:grid;grid-template-columns:30px 1fr auto;gap:8px;padding:9px 0;border-bottom:1px dashed var(--soft);font-family:var(--mono);font-size:9.5px}.bill-row b{color:var(--red)}.bill-row span{font-family:var(--sans);font-size:12.5px;font-weight:800}.bill-row i{font-style:normal;color:var(--blue);font-size:9px}
+.bill-total{margin-top:14px;padding-top:12px;border-top:2px solid var(--ink);display:flex;justify-content:space-between;font-family:var(--mono);font-size:12px;font-weight:700;color:var(--red)}
+.choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:24px}
+.choices button{min-height:98px;padding:14px;border:1px solid rgba(20,28,37,.22);background:rgba(244,240,228,.74);text-align:left;transition:transform .16s,border-color .16s,background .16s}
+.choices button:hover,.choices button.selected{transform:translateY(-2px);border-color:var(--red);background:#fff}.choices b{display:block;font-family:var(--mono);font-size:12px;color:var(--red);margin-bottom:8px}.choices span{display:block;font-weight:800}.choices small{display:block;margin-top:5px;color:var(--muted);line-height:1.45}
+.result{margin-top:22px;padding:16px;border-left:4px solid var(--red);background:rgba(255,255,255,.55);font-weight:800}.result[hidden]{display:none}
+.transition{
+  position:fixed;inset:54px 0 0;z-index:40;display:grid;place-items:center;background:var(--blue2);color:var(--paper);
+  opacity:0;pointer-events:none;transition:opacity .25s ease;
+}
+.transition.active{opacity:1}.transition .label{font-family:var(--mono);font-size:clamp(2.4rem,11vw,8rem);font-weight:700;color:var(--red)}.transition .sub{font-family:var(--mono);font-size:12px;letter-spacing:.18em;color:#b8c8ce;text-transform:uppercase}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+@media(max-width:900px){
+  body{overflow:auto}html,body,.app{height:auto;min-height:100%}.app{overflow:visible}
+  .topbar{grid-template-columns:1fr auto auto;height:48px}.topbar .status{display:flex;align-items:center;justify-content:flex-end;padding-left:6px}.topbar .status>b,.topbar .status>#status{display:none}.lang{margin-left:0}.lang button{min-width:32px;min-height:28px}.readout{height:48px;min-width:126px;font-size:10px}
+  .scene{position:relative;inset:auto;min-height:100dvh;display:grid;grid-template-columns:1fr;gap:22px;padding:76px 16px 28px}.scene:not(.active){display:none}
+  h1{font-size:clamp(2.65rem,11.8vw,4.15rem)}h2{font-size:clamp(1.95rem,9.6vw,3.1rem)}
+  .copy{order:-1}.meta-row{grid-template-columns:repeat(2,1fr)}.review-stage{min-height:440px}.review-stage::before{max-width:220px;line-height:1.35}.review-stage::after{left:18px;right:auto;top:46px}
+  .doc{width:84%;min-height:68%;padding:46px 18px 20px}.doc-head{margin-top:6px}.doc-title{font-size:1.45rem}.field-grid{grid-template-columns:1fr}.field{min-height:42px}
+  .risk-log{left:14px;right:14px;bottom:14px}.risk-item{grid-template-columns:34px 1fr;min-height:38px}.risk-item i{display:none}.stamp-returned{width:142px;height:70px;right:18px;top:90px;font-size:16px}
+  .memo{right:14px;bottom:136px;width:185px;font-size:13px}.choices{grid-template-columns:1fr}.bill{width:82%}
+}
+@media(min-width:901px){
+  .scene:not(#scene-boot).active{transform:none}
+}
+@media(max-width:430px){
+  html,body{height:100%;overflow:hidden}.app{height:100dvh;min-height:0;overflow:hidden}
+  .topbar{height:44px}.topbar>div{padding:0 10px}.readout{height:44px;min-width:92px}
+  .transition{inset:44px 0 0;transition:opacity .12s ease}
+  .scene,.scene:not(#scene-boot){
+    position:absolute;inset:44px 0 0;min-height:0;height:calc(100dvh - 44px);grid-template-rows:auto minmax(0,1fr);
+    align-content:start;gap:10px;padding:14px 14px 12px;overflow:hidden;
+  }
+  .copy{max-width:none}.eyebrow{margin-bottom:8px;font-size:9px;gap:8px}.eyebrow::after{width:72px}
+  h1{font-size:clamp(2.05rem,10.8vw,2.65rem)}h2{font-size:clamp(1.62rem,8vw,2.05rem)}
+  .lead{margin-top:10px;font-size:.92rem;line-height:1.52;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+  .caption{display:none}.small{display:none}.meta-row{display:none}.actions{margin-top:12px;gap:8px}
+  .cmd{min-height:42px;padding:10px 12px;font-size:10px;box-shadow:4px 4px 0 rgba(20,28,37,.16);position:relative;z-index:10}
+  .review-stage{min-height:0;height:100%;border-width:1px}.review-stage::before{left:12px;top:10px;font-size:8px;max-width:190px}.review-stage::after{left:12px;top:30px;font-size:8px}
+  .doc{width:86%;min-height:70%;padding:40px 16px 18px}.doc::before{height:24px;font-size:7.5px;padding:0 10px}.doc-head{font-size:8px;gap:8px;padding-bottom:8px}.doc-title{margin:16px 0 10px;font-size:1.13rem}
+  .field-grid{gap:6px;margin:10px 0 12px}.field{min-height:34px;padding:5px 7px;font-size:8px}.field b{font-size:10px}.line{margin:8px 0}
+  .risk-log{display:none}.memo{display:none}.stamp-returned{width:124px;height:58px;right:16px;top:72px;font-size:13px;border-width:4px}
+  .bill{width:78%;padding:20px 16px 18px}.bill h3{font-size:10px}.bill .sub{font-size:7.5px;margin:8px 0;padding:6px 0}
+  .bill-row{grid-template-columns:24px 1fr;gap:5px;padding:6px 0;font-size:8px}.bill-row span{font-size:10.5px}.bill-row i{grid-column:2;font-size:7px}.bill-total{font-size:9px;margin-top:9px;padding-top:8px}
+  .choices{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:12px}.choices button{min-height:74px;padding:9px;position:relative;z-index:10}.choices b{font-size:9px;margin-bottom:4px}.choices span{font-size:12px;line-height:1.35}.choices small{display:none}
+  #scene-priority .lead{display:none}#scene-priority .review-stage{height:min(31dvh,250px)}#scene-priority .actions{margin-top:10px}.result{margin-top:10px;padding:10px;font-size:12px;line-height:1.45}
+}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}.app::after{display:none}}
+</style>
+</head>
+<body>
+<main class="app">
+  <header class="topbar">
+    <div class="brand">C4IR KOREA <b>NO.09</b> · REVIEW SIMULATION</div>
+    <div class="readout" id="readout">DRAFT</div>
+    <div class="status"><b>●</b> <span id="status">READY</span><span class="lang"><button id="ko" aria-pressed="true">KO</button><button id="en" aria-pressed="false">EN</button></span></div>
+  </header>
+
+  <section class="scene active" id="scene-boot">
+    <div class="copy">
+      <div class="eyebrow">INVESTMENT REVIEW · 09:00 TOMORROW</div>
+      <h1 data-t="bootTitle">투자안은<br><em>아직 통과되지 않았다</em></h1>
+      <p class="lead" data-t="bootLead">증설 투자심의 전날. 제출 버튼 하나만 남았지만, 에너지 전환의 네 병목은 이미 보고서 밖에서 기다리고 있습니다.</p>
+      <p class="caption" data-t="bootCaption">이 체험은 네 병목을 설명하는 목록이 아닙니다. 투자안이 반려되는 과정을 지나며, 아직 오지 않은 청구서를 먼저 받아보는 시뮬레이션입니다.</p>
+      <div class="meta-row">
+        <div class="meta-box"><b data-t="metricInvest">$3.3조</b><span data-t="m1">2025 글로벌 에너지 투자</span></div>
+        <div class="meta-box"><b>42%</b><span data-t="m2">재생·원자력 전력 비중</span></div>
+        <div class="meta-box"><b>+0.03%</b><span data-t="m3">ETI 총점 변화</span></div>
+        <div class="meta-box"><b data-t="metricKorea">34위</b><span data-t="m4">한국 · 120개국 중</span></div>
+      </div>
+      <div class="actions"><button class="cmd" data-next="submit" data-t="submitBtn">투자안 제출</button><a class="cmd alt" href="c4ir-custom-brief-09-web.html" data-t="briefBtn">보고서 열기</a></div>
+    </div>
+    <div class="review-stage">
+      <div class="grid-bg"></div>
+      <div class="doc" data-report-label="투자심의 검토서 / INVESTMENT REVIEW REPORT" data-report-label-t="docLabel">
+        <div class="doc-head"><span>CAPEX REVIEW / D-1</span><span>STATUS · DRAFT</span></div>
+        <div class="doc-title" data-t="docPlan">에너지 전환 대응 증설 투자안</div>
+        <div class="field-grid">
+          <div class="field">SITE POWER DEMAND<b>+38MW</b></div>
+          <div class="field">COMMISSIONING<b>2028 Q2</b></div>
+          <div class="field">FUEL EXPOSURE<b>TO BE VERIFIED</b></div>
+          <div class="field">FINANCING<b>TERM SHEET PENDING</b></div>
+        </div>
+        <div class="line"></div><div class="line short"></div><div class="line red"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="scene dark" id="scene-submit">
+    <div class="copy">
+      <div class="eyebrow">SCREEN 01 · SUBMITTED</div>
+      <h2 data-t="submitTitle">문서는 들어갔고<br><em>심의가 시작됩니다</em></h2>
+      <p class="lead" data-t="submitLead">심의실은 ESG 의지를 보지 않습니다. 전력 접속, 연료 단가, 원료 공급, 조달 조건이 투자 일정에 붙어 있는지 먼저 봅니다.</p>
+      <p class="caption" data-t="submitCaption">제출된 문서는 곧 네 개의 보완 요청으로 되돌아옵니다.</p>
+      <div class="actions"><button class="cmd" data-next="grid" data-t="reviewBtn">심의 결과 확인</button></div>
+    </div>
+    <div class="review-stage">
+      <div class="grid-bg"></div>
+      <div class="doc" data-report-label="투자심의 검토서 / INVESTMENT REVIEW REPORT" data-report-label-t="docLabel">
+        <div class="doc-head"><span>CAPEX REVIEW / SUBMITTED</span><span>STATUS · CHECKING</span></div>
+        <div class="doc-title" data-t="docPlan">에너지 전환 대응 증설 투자안</div>
+        <div class="field-grid">
+          <div class="field">GRID CONNECTION<b>PENDING</b></div>
+          <div class="field">FUEL SENSITIVITY<b>PENDING</b></div>
+          <div class="field">MINERAL DEPENDENCY<b>PENDING</b></div>
+          <div class="field">FINANCING TERMS<b>PENDING</b></div>
+        </div>
+        <div class="line"></div><div class="line short"></div><div class="line"></div>
+      </div>
+      <div class="stamp-returned">CHECKING</div>
+    </div>
+  </section>
+
+  <section class="scene" id="scene-grid" data-return="true">
+    <div class="copy">
+      <div class="eyebrow">RETURNED 01 · GRID</div>
+      <h2 data-t="gridTitle">전력 접속 시점이<br><em>비어 있습니다</em></h2>
+      <p class="lead" data-t="gridLead">착공일보다 먼저 확인할 것은 접속 가능 시점입니다. 전 세계 계통 접속 대기는 2,500GW를 넘고, 신규 시설 접속에는 4~10년이 걸릴 수 있습니다.</p>
+      <p class="caption" data-t="gridCaption">전력 없는 착공일은 일정이 아니라 가정입니다.</p>
+      <div class="actions"><button class="cmd" data-next="fuel" data-t="nextReason">다음 반려 사유</button></div>
+    </div>
+    <div class="review-stage">
+      <div class="grid-bg"></div>
+      <div class="doc" data-report-label="투자심의 검토서 / INVESTMENT REVIEW REPORT" data-report-label-t="docLabel">
+        <div class="doc-head"><span>CAPEX REVIEW / RETURNED</span><span>GRID · MISSING</span></div>
+        <div class="doc-title" data-t="docReqGrid">보완 요청 01: 전력 접속</div>
+        <div class="field-grid"><div class="field">GLOBAL QUEUE<b>2,500GW+</b></div><div class="field">LEAD TIME<b>4~10Y</b></div></div>
+        <div class="line red"></div><div class="line short"></div>
+      </div>
+      <div class="stamp-returned">RETURNED</div>
+      <div class="memo"><small>REVIEW NOTE</small><span data-t="memoGrid">접속 예상 시점, 대안 전원, PPA/BESS 시나리오를 첨부하십시오.</span></div>
+      <div class="risk-log">
+        <div class="risk-item on"><b>01</b><span data-t="riskGrid">전력 접속 시점 미확인</span><i>DELAY</i></div>
+        <div class="risk-item"><b>02</b><span data-t="riskFuel">연료비 민감도 누락</span><i>COST</i></div>
+        <div class="risk-item"><b>03</b><span data-t="riskMin">핵심 원료 의존도 미점검</span><i>SUPPLY</i></div>
+        <div class="risk-item"><b>04</b><span data-t="riskCap">조달 조건 미확정</span><i>FINANCE</i></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="scene" id="scene-fuel" data-return="true">
+    <div class="copy">
+      <div class="eyebrow">RETURNED 02 · FUEL</div>
+      <h2 data-t="fuelTitle">연료비 민감도가<br><em>빠져 있습니다</em></h2>
+      <p class="lead" data-t="fuelLead">호르무즈 리스크와 LNG 현물가 변동은 세계 뉴스가 아니라 원가표 변수입니다. 아시아 LNG 현물가는 51% 뛰었고, 호르무즈는 세계 해상 원유의 약 4분의 1이 지나는 목입니다.</p>
+      <p class="caption" data-t="fuelCaption">연료 계약 구조를 모르면 다음 분기 단가 충격을 설명할 수 없습니다.</p>
+      <div class="actions"><button class="cmd" data-next="minerals" data-t="nextReason">다음 반려 사유</button></div>
+    </div>
+    <div class="review-stage">
+      <div class="grid-bg"></div>
+      <div class="doc" data-report-label="투자심의 검토서 / INVESTMENT REVIEW REPORT" data-report-label-t="docLabel">
+        <div class="doc-head"><span>CAPEX REVIEW / RETURNED</span><span>FUEL · MISSING</span></div>
+        <div class="doc-title" data-t="docReqFuel">보완 요청 02: 연료비 민감도</div>
+        <div class="field-grid"><div class="field">ASIAN LNG SPOT<b>+51%</b></div><div class="field">HORMUZ EXPOSURE<b>~1/4</b></div></div>
+        <div class="line red"></div><div class="line short"></div>
+      </div>
+      <div class="stamp-returned">RETURNED</div>
+      <div class="memo"><small>REVIEW NOTE</small><span data-t="memoFuel">장기·현물 비중, 도입선 다변화, 비상재고 기준을 첨부하십시오.</span></div>
+      <div class="risk-log">
+        <div class="risk-item on"><b>01</b><span data-t="riskGrid">전력 접속 시점 미확인</span><i>DELAY</i></div>
+        <div class="risk-item on"><b>02</b><span data-t="riskFuel">연료비 민감도 누락</span><i>COST</i></div>
+        <div class="risk-item"><b>03</b><span data-t="riskMin">핵심 원료 의존도 미점검</span><i>SUPPLY</i></div>
+        <div class="risk-item"><b>04</b><span data-t="riskCap">조달 조건 미확정</span><i>FINANCE</i></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="scene" id="scene-minerals" data-return="true">
+    <div class="copy">
+      <div class="eyebrow">RETURNED 03 · MINERALS</div>
+      <h2 data-t="minTitle">핵심 원료 지도가<br><em>비어 있습니다</em></h2>
+      <p class="lead" data-t="minLead">광물 리스크는 구매단가가 아니라 멈출 수 있는 원료의 문제입니다. 핵심 소재 공급은 상위 3개국에 약 86% 집중되어 있고, 수출통제는 더 자주 등장하고 있습니다.</p>
+      <p class="caption" data-t="minCaption">1차 협력사만 보면 실제 병목은 보이지 않습니다.</p>
+      <div class="actions"><button class="cmd" data-next="capital" data-t="nextReason">다음 반려 사유</button></div>
+    </div>
+    <div class="review-stage">
+      <div class="grid-bg"></div>
+      <div class="doc" data-report-label="투자심의 검토서 / INVESTMENT REVIEW REPORT" data-report-label-t="docLabel">
+        <div class="doc-head"><span>CAPEX REVIEW / RETURNED</span><span>SUPPLY · MISSING</span></div>
+        <div class="doc-title" data-t="docReqMin">보완 요청 03: 핵심 원료</div>
+        <div class="field-grid"><div class="field">TOP 3 SUPPLIERS<b>~86%</b></div><div class="field">EXPORT CONTROL<b>RISING</b></div></div>
+        <div class="line red"></div><div class="line short"></div>
+      </div>
+      <div class="stamp-returned">RETURNED</div>
+      <div class="memo"><small>REVIEW NOTE</small><span data-t="memoMin">단일국 의존, 전략재고, 대체소재를 2·3차 협력사까지 지도화하십시오.</span></div>
+      <div class="risk-log">
+        <div class="risk-item on"><b>01</b><span data-t="riskGrid">전력 접속 시점 미확인</span><i>DELAY</i></div>
+        <div class="risk-item on"><b>02</b><span data-t="riskFuel">연료비 민감도 누락</span><i>COST</i></div>
+        <div class="risk-item on"><b>03</b><span data-t="riskMin">핵심 원료 의존도 미점검</span><i>SUPPLY</i></div>
+        <div class="risk-item"><b>04</b><span data-t="riskCap">조달 조건 미확정</span><i>FINANCE</i></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="scene" id="scene-capital" data-return="true">
+    <div class="copy">
+      <div class="eyebrow">RETURNED 04 · CAPITAL</div>
+      <h2 data-t="capTitle">조달 조건이<br><em>투자로 묶이지 않습니다</em></h2>
+      <p class="lead" data-t="capLead">전환 프로젝트는 기술보다 자금 조건에서 멈춥니다. 청정에너지 투자는 $2.3조까지 늘었지만, 약 75%는 소수 시장에 집중됩니다.</p>
+      <p class="caption" data-t="capCaption">전환 로드맵 옆에 조달 로드맵이 없으면 투자는 일정이 아니라 희망입니다.</p>
+      <div class="actions"><button class="cmd" data-next="bill" data-t="printBill">예비 청구 명세 출력</button></div>
+    </div>
+    <div class="review-stage">
+      <div class="grid-bg"></div>
+      <div class="doc" data-report-label="투자심의 검토서 / INVESTMENT REVIEW REPORT" data-report-label-t="docLabel">
+        <div class="doc-head"><span>CAPEX REVIEW / RETURNED</span><span>FINANCE · MISSING</span></div>
+        <div class="doc-title" data-t="docReqCap">보완 요청 04: 조달 조건</div>
+        <div class="field-grid"><div class="field">CLEAN INVESTMENT<b>$2.3T</b></div><div class="field">MARKET FOCUS<b>~75%</b></div></div>
+        <div class="line red"></div><div class="line short"></div>
+      </div>
+      <div class="stamp-returned">RETURNED</div>
+      <div class="memo"><small>REVIEW NOTE</small><span data-t="memoCap">정책금융, 그린본드, PPA, 리스크 분담 조건을 투자안과 묶으십시오.</span></div>
+      <div class="risk-log">
+        <div class="risk-item on"><b>01</b><span data-t="riskGrid">전력 접속 시점 미확인</span><i>DELAY</i></div>
+        <div class="risk-item on"><b>02</b><span data-t="riskFuel">연료비 민감도 누락</span><i>COST</i></div>
+        <div class="risk-item on"><b>03</b><span data-t="riskMin">핵심 원료 의존도 미점검</span><i>SUPPLY</i></div>
+        <div class="risk-item on"><b>04</b><span data-t="riskCap">조달 조건 미확정</span><i>FINANCE</i></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="scene dark" id="scene-bill">
+    <div class="copy">
+      <div class="eyebrow">PRELIMINARY BILL · NOT YET DUE</div>
+      <h2 data-t="billTitle">반려 사유는<br><em>예비 청구서였습니다</em></h2>
+      <p class="lead" data-t="billLead">투자안은 통과되지 않았지만, 실제 비용이 오기 전에 무엇을 보완해야 하는지는 드러났습니다.</p>
+      <p class="caption" data-t="billCaption">영수증처럼 끝난 비용이 아니라, 아직 줄일 수 있는 비용 명세입니다.</p>
+      <div class="actions"><button class="cmd" data-next="priority" data-t="chooseBtn">이번 분기 보완 항목 선택</button></div>
+    </div>
+    <div class="review-stage">
+      <div class="grid-bg"></div>
+      <div class="doc fold" data-report-label="투자심의 검토서 / INVESTMENT REVIEW REPORT" data-report-label-t="docLabel">
+        <div class="doc-head"><span>CAPEX REVIEW</span><span>RETURNED</span></div>
+        <div class="doc-title" data-t="docReqAll">보완 요청 4건</div>
+        <div class="line red"></div><div class="line short"></div><div class="line"></div>
+      </div>
+      <div class="bill">
+        <h3>PRELIMINARY BILL</h3>
+        <div class="sub">NOT YET DUE · BEFORE NEXT INVESTMENT</div>
+        <div class="bill-row"><b>01</b><span data-t="billGrid">접속 지연 비용</span><i>DELAY</i></div>
+        <div class="bill-row"><b>02</b><span data-t="billFuel">연료 단가 충격</span><i>VOLATILITY</i></div>
+        <div class="bill-row"><b>03</b><span data-t="billMin">공급망 중단 위험</span><i>DEPENDENCY</i></div>
+        <div class="bill-row"><b>04</b><span data-t="billCap">조달비용 상승</span><i>FINANCING GAP</i></div>
+        <div class="bill-total"><span>DUE SOON</span><span>CHECK NOW</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="scene" id="scene-priority">
+    <div class="copy">
+      <div class="eyebrow">THIS QUARTER · CORRECT ONE LINE</div>
+      <h2 data-t="pTitle">이번 분기<br><em>반려 사유 하나를 지웁니다</em></h2>
+      <p class="lead" data-t="pLead">모든 기업에 같은 청구서가 오지는 않습니다. 우리 회사 투자안에 먼저 붙을 보완 항목 하나부터 지우면 됩니다.</p>
+      <div class="choices">
+        <button data-pick="grid"><b>01 GRID</b><span data-t="pickGrid">접속 가능 시점부터 다시 확인한다</span><small data-t="pickGridS">대안 전원, PPA, BESS 시나리오</small></button>
+        <button data-pick="fuel"><b>02 FUEL</b><span data-t="pickFuel">연료 계약·헤지 구조를 다시 본다</span><small data-t="pickFuelS">장기·현물 비중, 도입선, 비상재고</small></button>
+        <button data-pick="minerals"><b>03 MINERALS</b><span data-t="pickMin">2·3차 협력사 원료 의존도를 그린다</span><small data-t="pickMinS">단일국 의존, 대체소재, 전략재고</small></button>
+        <button data-pick="capital"><b>04 CAPITAL</b><span data-t="pickCap">조달 로드맵을 투자안에 붙인다</span><small data-t="pickCapS">정책금융, 그린본드, 리스크 분담 조건</small></button>
+      </div>
+      <div class="result" id="result" hidden></div>
+      <div class="actions"><a class="cmd" href="c4ir-custom-brief-09-web.html" data-t="readFull">전체 보고서 읽기</a><button class="cmd alt" id="restart" data-t="restart">다시 심의</button></div>
+    </div>
+    <div class="review-stage">
+      <div class="grid-bg"></div>
+      <div class="bill">
+        <h3>PRELIMINARY BILL</h3>
+        <div class="sub">ONE LINE CAN BE CORRECTED THIS QUARTER</div>
+        <div class="bill-row"><b>01</b><span data-t="billGrid">접속 지연 비용</span><i>OPEN</i></div>
+        <div class="bill-row"><b>02</b><span data-t="billFuel">연료 단가 충격</span><i>OPEN</i></div>
+        <div class="bill-row"><b>03</b><span data-t="billMin">공급망 중단 위험</span><i>OPEN</i></div>
+        <div class="bill-row"><b>04</b><span data-t="billCap">조달비용 상승</span><i>OPEN</i></div>
+        <div class="bill-total"><span>ACTION</span><span>THIS QUARTER</span></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="transition" id="transition" aria-hidden="true"><div><div class="label" id="transLabel">REVIEW</div><div class="sub" id="transSub">board packet moving</div></div></div>
+  <div class="sr" aria-live="polite" id="live">대기 중</div>
+</main>
+<script>
+"use strict";
+let LANG=0;
+let currentPick=null;
+let moving=false;
+let lastTouchAction=0;
+const $=s=>document.querySelector(s);
+const $$=s=>[...document.querySelectorAll(s)];
+const reduce=matchMedia("(prefers-reduced-motion:reduce)").matches;
+const scenes={boot:$("#scene-boot"),submit:$("#scene-submit"),grid:$("#scene-grid"),fuel:$("#scene-fuel"),minerals:$("#scene-minerals"),capital:$("#scene-capital"),bill:$("#scene-bill"),priority:$("#scene-priority")};
+const readout=$("#readout"),status=$("#status"),trans=$("#transition"),transLabel=$("#transLabel"),transSub=$("#transSub"),live=$("#live");
+const STR={
+  bootTitle:["투자안은<br><em>아직 통과되지 않았다</em>","The investment plan<br><em>has not passed yet</em>"],
+  bootLead:["증설 투자심의 전날. 제출 버튼 하나만 남았지만, 에너지 전환의 네 병목은 이미 보고서 밖에서 기다리고 있습니다.","The night before expansion review. Only submit remains, but four energy-transition bottlenecks are already waiting outside the document."],
+  bootCaption:["이 체험은 네 병목을 설명하는 목록이 아닙니다. 투자안이 반려되는 과정을 지나며, 아직 오지 않은 청구서를 먼저 받아보는 시뮬레이션입니다.","This is not a list of bottlenecks. It is a simulation where an investment plan is returned, revealing the bill before it arrives."],
+  metricInvest:["$3.3조","$3.3T"],metricKorea:["34위","34th"],
+  m1:["2025 글로벌 에너지 투자","Global energy investment in 2025"],m2:["재생·원자력 전력 비중","Power from renewables and nuclear"],m3:["ETI 총점 변화","ETI score change"],m4:["한국 · 120개국 중","Korea · of 120 countries"],
+  submitBtn:["투자안 제출","Submit plan"],briefBtn:["보고서 열기","Open brief"],reviewBtn:["심의 결과 확인","Check review result"],nextReason:["다음 반려 사유","Next return reason"],printBill:["예비 청구 명세 출력","Print preliminary bill"],chooseBtn:["이번 분기 보완 항목 선택","Choose correction this quarter"],readFull:["전체 보고서 읽기","Read full brief"],restart:["다시 심의","Review again"],
+  submitTitle:["문서는 들어갔고<br><em>심의가 시작됩니다</em>","The packet is in<br><em>review begins</em>"],submitLead:["심의실은 ESG 의지를 보지 않습니다. 전력 접속, 연료 단가, 원료 공급, 조달 조건이 투자 일정에 붙어 있는지 먼저 봅니다.","The review room does not judge intent. It checks whether connection, fuel, inputs, and financing are attached to the schedule."],submitCaption:["제출된 문서는 곧 네 개의 보완 요청으로 되돌아옵니다.","The submitted packet returns as four correction requests."],
+  gridTitle:["전력 접속 시점이<br><em>비어 있습니다</em>","Grid connection timing<br><em>is missing</em>"],gridLead:["착공일보다 먼저 확인할 것은 접속 가능 시점입니다. 전 세계 계통 접속 대기는 2,500GW를 넘고, 신규 시설 접속에는 4~10년이 걸릴 수 있습니다.","Before construction, confirm connection timing. Global interconnection queues exceed 2,500GW and new connections can take 4-10 years."],gridCaption:["전력 없는 착공일은 일정이 아니라 가정입니다.","A build date without power is an assumption, not a schedule."],
+  fuelTitle:["연료비 민감도가<br><em>빠져 있습니다</em>","Fuel sensitivity<br><em>is missing</em>"],fuelLead:["호르무즈 리스크와 LNG 현물가 변동은 세계 뉴스가 아니라 원가표 변수입니다. 아시아 LNG 현물가는 51% 뛰었고, 호르무즈는 세계 해상 원유의 약 4분의 1이 지나는 목입니다.","Hormuz risk and LNG volatility are cost variables, not distant news. Asian LNG spot prices rose 51%, and Hormuz carries about a quarter of seaborne oil."],fuelCaption:["연료 계약 구조를 모르면 다음 분기 단가 충격을 설명할 수 없습니다.","Without contract structure, next quarter's unit-cost shock cannot be explained."],
+  minTitle:["핵심 원료 지도가<br><em>비어 있습니다</em>","The critical input map<br><em>is missing</em>"],minLead:["광물 리스크는 구매단가가 아니라 멈출 수 있는 원료의 문제입니다. 핵심 소재 공급은 상위 3개국에 약 86% 집중되어 있고, 수출통제는 더 자주 등장하고 있습니다.","Mineral risk is not only price; it is the input that can stop production. Critical inputs are around 86% concentrated in the top three countries."],minCaption:["1차 협력사만 보면 실제 병목은 보이지 않습니다.","Tier-1 suppliers alone do not reveal the real bottleneck."],
+  capTitle:["조달 조건이<br><em>투자로 묶이지 않습니다</em>","Financing terms<br><em>are not bankable</em>"],capLead:["전환 프로젝트는 기술보다 자금 조건에서 멈춥니다. 청정에너지 투자는 $2.3조까지 늘었지만, 약 75%는 소수 시장에 집중됩니다.","Transition projects stop at financing terms. Clean-energy investment reached $2.3T, but about 75% is concentrated in a few markets."],capCaption:["전환 로드맵 옆에 조달 로드맵이 없으면 투자는 일정이 아니라 희망입니다.","Without a financing roadmap beside the transition roadmap, investment is hope, not schedule."],
+  billTitle:["반려 사유는<br><em>예비 청구서였습니다</em>","The return reasons<br><em>were an advance bill</em>"],billLead:["투자안은 통과되지 않았지만, 실제 비용이 오기 전에 무엇을 보완해야 하는지는 드러났습니다.","The plan did not pass, but it revealed what must be fixed before costs arrive."],billCaption:["영수증처럼 끝난 비용이 아니라, 아직 줄일 수 있는 비용 명세입니다.","Not a receipt for money already spent, but a bill that can still be reduced."],
+  pTitle:["이번 분기<br><em>반려 사유 하나를 지웁니다</em>","This quarter,<br><em>remove one return reason</em>"],pLead:["모든 기업에 같은 청구서가 오지는 않습니다. 우리 회사 투자안에 먼저 붙을 보완 항목 하나부터 지우면 됩니다.","Not every company receives the same bill. Remove the first correction item attached to your plan."],
+  pickGrid:["접속 가능 시점부터 다시 확인한다","Start with connection timing"],pickGridS:["대안 전원, PPA, BESS 시나리오","Alternative power, PPA, BESS scenario"],
+  pickFuel:["연료 계약·헤지 구조를 다시 본다","Review fuel contract and hedge structure"],pickFuelS:["장기·현물 비중, 도입선, 비상재고","Long-term/spot mix, suppliers, emergency stock"],
+  pickMin:["2·3차 협력사 원료 의존도를 그린다","Map tier-2/3 input dependence"],pickMinS:["단일국 의존, 대체소재, 전략재고","Single-country dependence, substitutes, strategic stock"],
+  pickCap:["조달 로드맵을 투자안에 붙인다","Attach financing roadmap"],pickCapS:["정책금융, 그린본드, 리스크 분담 조건","Policy finance, green bonds, risk-sharing terms"],
+  docLabel:["투자심의 검토서 / INVESTMENT REVIEW REPORT","INVESTMENT REVIEW REPORT"],
+  docPlan:["에너지 전환 대응 증설 투자안","Energy Transition Expansion Plan"],
+  docReqGrid:["보완 요청 01: 전력 접속","Correction Request 01: Grid Connection"],
+  docReqFuel:["보완 요청 02: 연료비 민감도","Correction Request 02: Fuel Sensitivity"],
+  docReqMin:["보완 요청 03: 핵심 원료","Correction Request 03: Critical Inputs"],
+  docReqCap:["보완 요청 04: 조달 조건","Correction Request 04: Financing Terms"],
+  docReqAll:["보완 요청 4건","4 Correction Requests"],
+  memoGrid:["접속 예상 시점, 대안 전원, PPA/BESS 시나리오를 첨부하십시오.","Attach connection timing, alternative power, and PPA/BESS scenarios."],
+  memoFuel:["장기·현물 비중, 도입선 다변화, 비상재고 기준을 첨부하십시오.","Attach long-term/spot mix, supplier diversification, and emergency stock levels."],
+  memoMin:["단일국 의존, 전략재고, 대체소재를 2·3차 협력사까지 지도화하십시오.","Map single-country dependence, strategic stock, and substitute materials down to tier-2/3 suppliers."],
+  memoCap:["정책금융, 그린본드, PPA, 리스크 분담 조건을 투자안과 묶으십시오.","Tie policy finance, green bonds, PPAs, and risk-sharing terms to the investment plan."],
+  riskGrid:["전력 접속 시점 미확인","Grid connection timing unconfirmed"],
+  riskFuel:["연료비 민감도 누락","Fuel sensitivity missing"],
+  riskMin:["핵심 원료 의존도 미점검","Critical input dependence unmapped"],
+  riskCap:["조달 조건 미확정","Financing terms unconfirmed"],
+  billGrid:["접속 지연 비용","Connection delay cost"],
+  billFuel:["연료 단가 충격","Fuel price shock"],
+  billMin:["공급망 중단 위험","Supply interruption risk"],
+  billCap:["조달비용 상승","Financing cost increase"]
+};
+const RESULT={
+  grid:["이번 분기에는 접속 가능 시점부터 지우십시오. 증설 검토서의 첫 줄이 부지가 아니라 전력 접속일이 되면, 일정표가 가정에서 계획으로 바뀝니다.","Remove connection timing first this quarter. When the first line is grid access, not land, the schedule becomes a plan."],
+  fuel:["이번 분기에는 연료 민감도부터 지우십시오. 장기·현물 비중과 비상재고가 보이면 다음 단가 충격을 비용표 안에 넣을 수 있습니다.","Remove fuel sensitivity first this quarter. Long-term/spot mix and emergency stock bring the next price shock into the cost sheet."],
+  minerals:["이번 분기에는 원료 의존도부터 지우십시오. 2·3차 협력사까지 내려간 지도만이 돈이 있어도 못 사는 원료를 보여줍니다.","Remove input dependence first this quarter. Only a tier-2/3 map shows inputs that money alone cannot buy."],
+  capital:["이번 분기에는 조달 조건부터 지우십시오. 전환 로드맵 옆에 정책금융, 그린본드, PPA 조건이 붙어야 기술이 투자로 바뀝니다.","Remove financing terms first this quarter. Policy finance, green bonds, and PPA terms turn technology into investment."]
+};
+function T(k){return STR[k]?.[LANG]??k}
+function applyLang(){
+  document.documentElement.lang=LANG?"en":"ko";
+  $$("[data-t]").forEach(el=>{el.innerHTML=T(el.dataset.t)});
+  $$("[data-report-label-t]").forEach(el=>{el.setAttribute("data-report-label",T(el.dataset.reportLabelT))});
+  if(currentPick){
+    const result=$("#result");
+    result.textContent=RESULT[currentPick][LANG];
+    live.textContent=result.textContent;
+  }
+  $("#ko").setAttribute("aria-pressed",String(LANG===0));
+  $("#en").setAttribute("aria-pressed",String(LANG===1));
+  document.title=LANG?"Investment Review Return Simulation - C4IR Custom Brief No.09":"투자심의 반려 시뮬레이션 - C4IR Custom Brief No.09";
+}
+function wait(ms){return new Promise(r=>setTimeout(r,reduce?Math.min(ms,60):ms))}
+async function show(name){
+  if(moving||!scenes[name]) return;
+  moving=true;
+  const labels={boot:"DRAFT",submit:"SUBMITTED",grid:"RETURN 01",fuel:"RETURN 02",minerals:"RETURN 03",capital:"RETURN 04",bill:"BILL",priority:"ACTION"};
+  const subs={submit:"board packet moving",grid:"returned for grid connection",fuel:"returned for fuel sensitivity",minerals:"returned for input map",capital:"returned for financing terms",bill:"printing preliminary bill",priority:"choose one correction"};
+  try{
+    if(name!=="boot"){
+      transLabel.textContent=labels[name]||"REVIEW";
+      transSub.textContent=subs[name]||"review in progress";
+      trans.classList.add("active");
+      await wait(440);
+    }
+    Object.values(scenes).forEach(s=>s.classList.remove("active"));
+    scenes[name].classList.add("active");
+    $(".app").scrollTop=0;
+    readout.textContent=labels[name]||"REVIEW";
+    status.textContent=name==="priority"?"CHOOSE ONE":"REVIEWING";
+    live.textContent=readout.textContent;
+    const narrow=matchMedia("(max-width:900px)").matches;
+    if(narrow) window.scrollTo({top:0,behavior:"auto"});
+    else $(".app").scrollTop=0;
+    await wait(300);
+    trans.classList.remove("active");
+  }finally{
+    moving=false;
+  }
+}
+function runAction(e){
+  const next=e.target.closest("[data-next]")?.dataset.next;
+  if(next){
+    e.preventDefault();
+    show(next);
+    return;
+  }
+  const pick=e.target.closest("[data-pick]");
+  if(pick){
+    e.preventDefault();
+    $$("[data-pick]").forEach(b=>b.classList.remove("selected"));
+    pick.classList.add("selected");
+    const key=pick.dataset.pick;
+    currentPick=key;
+    const result=$("#result");
+    result.hidden=false;
+    result.textContent=RESULT[key][LANG];
+    live.textContent=result.textContent;
+  }
+}
+document.addEventListener("pointerup",e=>{
+  if(e.pointerType!=="touch") return;
+  if(!e.target.closest("[data-next],[data-pick]")) return;
+  lastTouchAction=Date.now();
+  runAction(e);
+});
+document.addEventListener("touchend",e=>{
+  if(!e.target.closest("[data-next],[data-pick]")) return;
+  lastTouchAction=Date.now();
+  runAction(e);
+},{passive:false});
+document.addEventListener("click",e=>{
+  if(Date.now()-lastTouchAction<450&&e.target.closest("[data-next],[data-pick]")){
+    e.preventDefault();
+    return;
+  }
+  runAction(e);
+});
+$("#restart").addEventListener("click",()=>show("boot"));
+$("#ko").addEventListener("click",()=>{LANG=0;applyLang()});
+$("#en").addEventListener("click",()=>{LANG=1;applyLang()});
+window.addEventListener("keydown",e=>{
+  if(e.key!=="Enter"&&e.key!==" ") return;
+  const active=$(".scene.active");
+  const action=active?.querySelector("button:not([disabled]),a");
+  if(!action||document.activeElement===action) return;
+  e.preventDefault(); action.click();
+});
+applyLang();
+</script>
+</body>
+</html>
